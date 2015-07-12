@@ -11,6 +11,7 @@ CFLAGS := -mthumb -mcpu=cortex-m4
 CFLAGS += -ffunction-sections -fdata-sections
 CFLAGS += -Os -std=gnu99 -Wall
 LDFLAGS := -nostartfiles -Wl,--gc-sections
+LDSCRIPT = stm32f429.lds
 
 obj-y += foo.o
 
@@ -19,8 +20,8 @@ all: test.elf test.bin
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
 
-test.elf: $(obj-y) Makefile
-	$(CC) -T stm32f429.lds $(LDFLAGS) -o test.elf $(obj-y)
+test.elf: $(obj-y) Makefile $(LDSCRIPT)
+	$(CC) -T $(LDSCRIPT) $(LDFLAGS) -o test.elf $(obj-y)
 
 test.bin: test.elf Makefile
 	$(OBJCOPY) -Obinary test.elf test.bin
