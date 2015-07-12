@@ -18,10 +18,10 @@ obj-y += foo.o
 all: test.elf test.bin
 
 %.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 test.elf: $(obj-y) Makefile $(LDSCRIPT)
-	$(CC) -T $(LDSCRIPT) $(LDFLAGS) -o test.elf $(obj-y)
+	$(CC) $(CFLAGS) -T $(LDSCRIPT) $(LDFLAGS) -o test.elf $(obj-y)
 
 test.bin: test.elf Makefile
 	$(OBJCOPY) -Obinary test.elf test.bin
