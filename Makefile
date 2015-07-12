@@ -21,7 +21,7 @@ all: test.elf test.bin
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test.elf: $(obj-y) Makefile $(LDSCRIPT)
-	$(CC) $(CFLAGS) -T $(LDSCRIPT) $(LDFLAGS) -o test.elf $(obj-y)
+	$(CC) $(CFLAGS) -T $(LDSCRIPT) -Wl,-Map,test.map $(LDFLAGS) -o test.elf $(obj-y)
 
 test.bin: test.elf Makefile
 	$(OBJCOPY) -Obinary test.elf test.bin
