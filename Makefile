@@ -14,7 +14,7 @@ LDFLAGS := -nostartfiles -Wl,--gc-sections
 
 obj-y += foo.o
 
-all: test.elf test
+all: test.elf test.bin
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
@@ -22,7 +22,7 @@ all: test.elf test
 test.elf: $(obj-y) Makefile
 	$(CC) -T stm32f429.lds $(LDFLAGS) -o test.elf $(obj-y)
 
-test: test.elf Makefile
+test.bin: test.elf Makefile
 	$(OBJCOPY) -Obinary test.elf test.bin
 	$(OBJDUMP) -S test.elf > test.lst
 	$(SIZE) test.elf
@@ -30,7 +30,7 @@ test: test.elf Makefile
 clean:
 	@rm -f *.o *.elf *.bin *.lst
 
-flash: test
+flash: test.bin
 	$(OPENOCD) -f board/stm32f429discovery.cfg \
 	  -c "init" \
 	  -c "reset init" \
@@ -40,5 +40,5 @@ flash: test
 	  -c "reset run" \
 	  -c "shutdown"
 
-debug: test
+debug: test.elf test.bin
 	$(GDB) test.elf -ex "target remote :3333" -ex "monitor reset halt"
