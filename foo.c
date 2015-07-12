@@ -231,6 +231,12 @@ void start_kernel(void);
 void start_kernel(void)
 {
 	void (*kernel)(uint32_t reserved, uint32_t mach, uint32_t dt) = (void (*)(uint32_t, uint32_t, uint32_t))(0x08008000 | 1);
+	volatile uint32_t *RCC_APB1ENR = (void *)(RCC_BASE + 0x40);
+	uint32_t val;
+
+	val = *RCC_APB1ENR;
+	val |= 1 << 3;
+	*RCC_APB1ENR = val;
 
 	kernel(0, ~0UL, 0x08004000);
 }
